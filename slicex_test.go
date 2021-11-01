@@ -3,6 +3,7 @@ package slicex_test
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/drykit-go/slicex"
@@ -42,6 +43,87 @@ func TestReduce(t *testing.T) {
 		t.Errorf("exp %v\ngot %v", exp, got)
 	}
 }
+
+func TestApply(t *testing.T) {
+	s := make([]bool, 5)
+	n := 0
+	f := func(i int, v bool) {
+		if !v {
+			n = i + 1
+		}
+	}
+	exp := 5
+	slicex.Apply(s, f)
+	if n != exp {
+		t.Errorf("exp %v\ngot %v", exp, n)
+	}
+}
+
+func TestApplyUntil(t *testing.T) {
+	newSlice := func() []int {
+		return []int{0, 1, 2, 3}
+	}
+	t.Run("stop at index", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+			n = i
+			return i < 2
+		})
+		exp := 2
+		if n != exp {
+			t.Errorf("did not stop at expected index:\nexp %v\ngot %v", exp, n)
+		}
+	})
+	t.Run("stop at value", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(_, v int) bool {
+			n = v
+			return v < 2
+		})
+		exp := 2
+		if n != exp {
+			t.Errorf("did not stop at expected value:\nexp %v\ngot %v", exp, n)
+		}
+	})
+	t.Run("stop at end", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+			n = i
+			return true
+		})
+		exp := 3
+		if n != exp {
+			t.Errorf("did stop before the end:\nexp index %v\ngot index %v", exp, n)
+		}
+	})
+}
+
+func TestKeysOf(t *testing.T) {
+	m := map[string]any{
+		"a": 3,
+		"b": "hi",
+		"c": false,
+	}
+	keys := slicex.KeysOf(m)
+	sort.Strings(keys)
+	exp := []string{"a", "b", "c"}
+	assertEqualSlices(t, keys, exp)
+}
+
+func TestValuesOf(t *testing.T) {
+	m := map[string]any{
+		"a": 3,
+		"b": "hi",
+		"c": false,
+	}
+	values := slicex.ValuesOf(m)
+	valuesstr := slicex.Map(values, func(v any) string { return fmt.Sprint(v) })
+	sort.Strings(valuesstr)
+	exp := []string{"3", "false", "hi"}
+	assertEqualSlices(t, valuesstr, exp)
+}
+
+// Helpers
 
 func assertEqualSlices[T any](t *testing.T, a, b []T) {
 	t.Helper()
