@@ -1,0 +1,59 @@
+version: 2.1
+
+aliases:
+  defaults: &defaults
+    working_directory: ~/testx
+    docker:
+      - image: circleci/golang:1.16.5
+
+commands:
+  setup:
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Install dependencies
+          command: |
+            go mod download
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}-{{ .Environment.CACHE_VERSION }}
+          paths:
+            - /go/pkg/mod
+
+      - restore_cache:
+          keys:
+            - gotip-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Install gotip
+          command: |
+            command -v /go/bin/gotip && echo "Skipping gotip installation" && exit
+            go install golang.org/dl/gotip@latest
+            gotip download
+      - save_cache:
+          key: gotip-{{ .Environment.CACHE_VERSION }}
+          paths:
+            - /go/bin/gotip
+      - run:
+          name: Run gotip download
+          command: |
+            gotip download
+
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - setup
+      - run:
+          name: Run unit tests
+          command: |
+            make tests
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - test
+
