@@ -24,6 +24,25 @@ func TestFilter(t *testing.T) {
 	assertEqualSlices(t, got, exp)
 }
 
+func TestReduce(t *testing.T) {
+	type bill struct {
+		label  string
+		amount float64
+	}
+	bills := []bill{
+		{label: "a", amount: 3.14},
+		{label: "b", amount: 39},
+		{label: "c", amount: -.14},
+	}
+	calculateSum := func(sum float64, cur bill) float64 {
+		return sum + cur.amount
+	}
+	exp := 42.
+	if got := slicex.Reduce(bills, calculateSum, 0); got != exp {
+		t.Errorf("exp %v\ngot %v", exp, got)
+	}
+}
+
 func assertEqualSlices[T any](t *testing.T, a, b []T) {
 	t.Helper()
 	if !reflect.DeepEqual(a, b) {
