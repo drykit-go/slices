@@ -70,3 +70,14 @@ func ApplyUntil[Elem any](src []Elem, f func(i int, v Elem) bool) {
 		}
 	}
 }
+
+// KeysOf returns a slice of src's keys in an undeterminated order.
+func KeysOf[Key comparable, Val any](src map[Key]Val) []Key {
+	out := make([]Key, len(src))
+	i := 0
+	for k := range src {
+		out[i] = k
+		i++
+	}
+	return out
+}
