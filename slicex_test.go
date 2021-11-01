@@ -58,6 +58,45 @@ func TestApply(t *testing.T) {
 	}
 }
 
+func TestApplyUntil(t *testing.T) {
+	newSlice := func() []int {
+		return []int{0, 1, 2, 3}
+	}
+	t.Run("stop at index", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+			n = i
+			return i < 2
+		})
+		exp := 2
+		if n != exp {
+			t.Errorf("did not stop at expected index:\nexp %v\ngot %v", exp, n)
+		}
+	})
+	t.Run("stop at value", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(_, v int) bool {
+			n = v
+			return v < 2
+		})
+		exp := 2
+		if n != exp {
+			t.Errorf("did not stop at expected value:\nexp %v\ngot %v", exp, n)
+		}
+	})
+	t.Run("stop at end", func(t *testing.T) {
+		n := 0
+		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+			n = i
+			return true
+		})
+		exp := 3
+		if n != exp {
+			t.Errorf("did stop before the end:\nexp index %v\ngot index %v", exp, n)
+		}
+	})
+}
+
 // Helpers
 
 func assertEqualSlices[T any](t *testing.T, a, b []T) {
