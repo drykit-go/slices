@@ -43,6 +43,23 @@ func TestReduce(t *testing.T) {
 	}
 }
 
+func TestApply(t *testing.T) {
+	s := make([]bool, 5)
+	n := 0
+	f := func(i int, v bool) {
+		if !v {
+			n = i + 1
+		}
+	}
+	exp := 5
+	slicex.Apply(s, f)
+	if n != exp {
+		t.Errorf("exp %v\ngot %v", exp, n)
+	}
+}
+
+// Helpers
+
 func assertEqualSlices[T any](t *testing.T, a, b []T) {
 	t.Helper()
 	if !reflect.DeepEqual(a, b) {
