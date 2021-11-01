@@ -60,3 +60,13 @@ func Apply[Elem any](src []Elem, f func(i int, v Elem)) {
 		f(i, v)
 	}
 }
+
+// ApplyUntil iterates over src and calls f(currentIndex, currentElement)
+// each iteration until it returns false or the end is reached.
+func ApplyUntil[Elem any](src []Elem, f func(i int, v Elem) bool) {
+	for i, v := range src {
+		if !f(i, v) {
+			return
+		}
+	}
+}
