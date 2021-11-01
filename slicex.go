@@ -6,6 +6,9 @@ type (
 
 	// MapFunc is a function that transforms v into a value of any type.
 	MapFunc[T, U any] func(v T) U
+
+	// ReduceFunc is a reducer function.
+	ReduceFunc[U, T any] func(U, T) U
 )
 
 // Map applies f on each element of src and returns the resulting slice.
@@ -29,6 +32,20 @@ func Filter[T any](src []T, f FilterFunc[T]) []T {
 		if f(v) {
 			out = append(out, v)
 		}
+	}
+	return out
+}
+
+// Reduce applies reducer f to src starting from ini and returns
+// the accumulated value.
+func Reduce[Elem, Accumulator any](
+	src []Elem,
+	f ReduceFunc[Accumulator, Elem],
+	ini Accumulator,
+) Accumulator {
+	out := ini
+	for _, v := range src {
+		out = f(out, v)
 	}
 	return out
 }
