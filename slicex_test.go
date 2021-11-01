@@ -99,7 +99,7 @@ func TestApplyUntil(t *testing.T) {
 }
 
 func TestKeysOf(t *testing.T) {
-	m := map[string]interface{}{
+	m := map[string]any{
 		"a": 3,
 		"b": "hi",
 		"c": false,
@@ -108,6 +108,19 @@ func TestKeysOf(t *testing.T) {
 	sort.Strings(keys)
 	exp := []string{"a", "b", "c"}
 	assertEqualSlices(t, keys, exp)
+}
+
+func TestValuesOf(t *testing.T) {
+	m := map[string]any{
+		"a": 3,
+		"b": "hi",
+		"c": false,
+	}
+	values := slicex.ValuesOf(m)
+	valuesstr := slicex.Map(values, func(v any) string { return fmt.Sprint(v) })
+	sort.Strings(valuesstr)
+	exp := []string{"3", "false", "hi"}
+	assertEqualSlices(t, valuesstr, exp)
 }
 
 // Helpers
