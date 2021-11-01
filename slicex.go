@@ -81,3 +81,14 @@ func KeysOf[Key comparable, Val any](src map[Key]Val) []Key {
 	}
 	return out
 }
+
+// ValuesOf returns a slice of src's values in an undeterminated order.
+func ValuesOf[Key comparable, Val any](src map[Key]Val) []Val {
+	out := make([]Val, len(src))
+	i := 0
+	for _, v := range src {
+		out[i] = v
+		i++
+	}
+	return out
+}
