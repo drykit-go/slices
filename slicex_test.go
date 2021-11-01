@@ -3,6 +3,7 @@ package slicex_test
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/drykit-go/slicex"
@@ -95,6 +96,18 @@ func TestApplyUntil(t *testing.T) {
 			t.Errorf("did stop before the end:\nexp index %v\ngot index %v", exp, n)
 		}
 	})
+}
+
+func TestKeysOf(t *testing.T) {
+	m := map[string]interface{}{
+		"a": 3,
+		"b": "hi",
+		"c": false,
+	}
+	keys := slicex.KeysOf(m)
+	sort.Strings(keys)
+	exp := []string{"a", "b", "c"}
+	assertEqualSlices(t, keys, exp)
 }
 
 // Helpers
