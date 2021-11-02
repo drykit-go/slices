@@ -1,6 +1,6 @@
-# SliceX
+# Slices
 
-SliceX provides functional operations on Go slices using Go 1.18 type parameters.
+Slices provides functional operations on Go slices using Go 1.18 type parameters.
 
 ## Get started
 
@@ -15,7 +15,7 @@ SliceX provides functional operations on Go slices using Go 1.18 type parameters
 Assuming the above prerequisites are fulfilled:
 
 ```sh
-gotip get github.com/drykit-go/slicex
+gotip get github.com/drykit-go/slices
 ```
 
 ## Available functions
@@ -30,4 +30,4 @@ gotip get github.com/drykit-go/slicex
 
 ## Examples
 
-See [unit tests](./slicex_test.go) for some usage examples.
+See [unit tests](./slices_test.go) for some usage examples.
