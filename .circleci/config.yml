@@ -2,7 +2,7 @@ version: 2.1
 
 aliases:
   defaults: &defaults
-    working_directory: ~/testx
+    working_directory: ~/slices
     docker:
       - image: circleci/golang:1.16.5
 

@@ -1,4 +1,4 @@
-package slicex_test
+package slices_test
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/drykit-go/slicex"
+	"github.com/drykit-go/slices"
 )
 
 func TestMap(t *testing.T) {
 	ints := []int{0, 5, -1}
 	toString := func(n int) string { return fmt.Sprint(n) }
 	exp := []string{"0", "5", "-1"}
-	got := slicex.Map(ints, toString)
+	got := slices.Map(ints, toString)
 	assertEqualSlices(t, got, exp)
 }
 
@@ -21,7 +21,7 @@ func TestFilter(t *testing.T) {
 	ints := []int{0, 5, -1}
 	isEven := func(n int) bool { return n&1 == 0 }
 	exp := []int{0}
-	got := slicex.Filter(ints, isEven)
+	got := slices.Filter(ints, isEven)
 	assertEqualSlices(t, got, exp)
 }
 
@@ -39,7 +39,7 @@ func TestReduce(t *testing.T) {
 		return sum + cur.amount
 	}
 	exp := 42.
-	if got := slicex.Reduce(bills, calculateSum, 0); got != exp {
+	if got := slices.Reduce(bills, calculateSum, 0); got != exp {
 		t.Errorf("exp %v\ngot %v", exp, got)
 	}
 }
@@ -53,7 +53,7 @@ func TestApply(t *testing.T) {
 		}
 	}
 	exp := 5
-	slicex.Apply(s, f)
+	slices.Apply(s, f)
 	if n != exp {
 		t.Errorf("exp %v\ngot %v", exp, n)
 	}
@@ -65,7 +65,7 @@ func TestApplyUntil(t *testing.T) {
 	}
 	t.Run("stop at index", func(t *testing.T) {
 		n := 0
-		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+		slices.ApplyUntil(newSlice(), func(i, _ int) bool {
 			n = i
 			return i < 2
 		})
@@ -76,7 +76,7 @@ func TestApplyUntil(t *testing.T) {
 	})
 	t.Run("stop at value", func(t *testing.T) {
 		n := 0
-		slicex.ApplyUntil(newSlice(), func(_, v int) bool {
+		slices.ApplyUntil(newSlice(), func(_, v int) bool {
 			n = v
 			return v < 2
 		})
@@ -87,7 +87,7 @@ func TestApplyUntil(t *testing.T) {
 	})
 	t.Run("stop at end", func(t *testing.T) {
 		n := 0
-		slicex.ApplyUntil(newSlice(), func(i, _ int) bool {
+		slices.ApplyUntil(newSlice(), func(i, _ int) bool {
 			n = i
 			return true
 		})
@@ -104,7 +104,7 @@ func TestKeysOf(t *testing.T) {
 		"b": "hi",
 		"c": false,
 	}
-	keys := slicex.KeysOf(m)
+	keys := slices.KeysOf(m)
 	sort.Strings(keys)
 	exp := []string{"a", "b", "c"}
 	assertEqualSlices(t, keys, exp)
@@ -116,8 +116,8 @@ func TestValuesOf(t *testing.T) {
 		"b": "hi",
 		"c": false,
 	}
-	values := slicex.ValuesOf(m)
-	valuesstr := slicex.Map(values, func(v any) string { return fmt.Sprint(v) })
+	values := slices.ValuesOf(m)
+	valuesstr := slices.Map(values, func(v any) string { return fmt.Sprint(v) })
 	sort.Strings(valuesstr)
 	exp := []string{"3", "false", "hi"}
 	assertEqualSlices(t, valuesstr, exp)

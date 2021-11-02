@@ -1,3 +1,3 @@
-module github.com/drykit-go/slicex
+module github.com/drykit-go/slices
 
 go 1.18

@@ -1,4 +1,4 @@
-package slicex
+package slices
 
 type (
 	// FilterFunc is a function that returns a boolean value
