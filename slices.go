@@ -92,3 +92,13 @@ func ValuesOf[Key comparable, Val any](src map[Key]Val) []Val {
 	}
 	return out
 }
+
+// AsAny converts src to a new []any having the same length
+// and underlying values.
+func AsAny[Elem any](src []Elem) []any {
+	out := make([]any, len(src))
+	for i, v := range src {
+		out[i] = v
+	}
+	return out
+}
