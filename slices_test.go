@@ -123,6 +123,13 @@ func TestValuesOf(t *testing.T) {
 	assertEqualSlices(t, valuesstr, exp)
 }
 
+func TestAsAny(t *testing.T) {
+	s := []string{"a", "b", "c"}
+	got := slices.AsAny(s)
+	exp := []any{"a", "b", "c"}
+	assertEqualSlices(t, got, exp)
+}
+
 // Helpers
 
 func assertEqualSlices[T any](t *testing.T, a, b []T) {
